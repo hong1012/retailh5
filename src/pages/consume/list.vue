@@ -1,14 +1,16 @@
 <template>
-    <div>
-      <div>消费</div>
+    <div class="g-page">
+      <v-empty class="empty-view"></v-empty>
     </div>
 </template>
 
 <script>
 import base from 'pages/base'
+import vEmpty from 'src/components/empty'
+
 export default {
   mixins: [base],
-  components: {},
+  components: {vEmpty},
   data() {
     return {}
   },
@@ -20,8 +22,8 @@ export default {
 }
 </script>
 
-<style scoped>
-  div {
-    font-size: 0.32rem;
+<style  lang="scss" scoped>
+  .empty-view {
+    padding-top: 1rem;
   }
 </style>

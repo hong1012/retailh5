@@ -2,46 +2,63 @@
     <div class="g-page">
       <div>
         <div class="header">
-          <p>云零售</p>
-          <p>2342354325235235325</p>
+          <p>会员卡</p>
+          <p class="card-no">3432123432523533445566</p>
         </div>
         <div class="content">
           <div class="left">
-            <p>余额</p>
             <p>100</p>
+            <p>余额</p>
           </div>
-          <div class="right">充值</div>
+          <div class="right" @click="recharge">充值</div>
         </div>
       </div>
       <yd-cell-group title="">
-        <yd-cell-item arrow @click.native="recharge">
-          <yd-icon slot="icon" name="feedback" size=".42rem"></yd-icon>
+        <yd-cell-item arrow @click.native="rechargeList" class="icon-cell">
+          <img slot="icon" class="icon-img" :src="moneyIcon" />
           <span slot="left">充值记录</span>
         </yd-cell-item>
-        <yd-cell-item arrow  @click.native="consume">
-          <yd-icon slot="icon" name="compose" size=".42rem"></yd-icon>
+        <yd-cell-item arrow  @click.native="consumeList" class="icon-cell">
+          <img slot="icon" class="icon-img" :src="consumeIcon" />
           <span slot="left">消费记录</span>
         </yd-cell-item>
       </yd-cell-group>
-
     </div>
 </template>
 
 <script>
+/*eslint-disable*/
 import base from 'pages/base'
+import {apiCard} from 'utils/api'
+let moneyIcon = require('assets/images/money.svg');
+let consumeIcon = require('assets/images/consume.svg');
+
 export default {
   mixins: [base],
   components: {},
   data() {
-    return {}
+    return {
+      moneyIcon: moneyIcon,
+      consumeIcon: consumeIcon
+    }
   },
   mounted() {
   },
   methods: {
+    getData() {
+      let params = {"skey":"","nickname":"","info":{"lableName":"","startDate":"","endDate":"","dateRange":"","mobile":"","name":"","type":"","nickname":"","shopid":"","shopname":""},"orderColum":"","orderRule":"","shopid":"","pageIndex":1,"pageSize":20,"fromDate":"","toDate":""}
+      apiCard.list(params).then(res => {
+        console.log(res)
+        this.toast('接口调用可以');
+      });
+    },
     recharge() {
+      this.$router.push({path: '/recharge/index'})
+    },
+    rechargeList() {
       this.$router.push({path: '/recharge/list'})
     },
-    consume() {
+    consumeList() {
       this.$router.push({path: '/consume/list'})
     }
   },
@@ -55,13 +72,19 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: #00CC66;
+    background: #5C92FF;
     color: #ffffff;
-    height: 1.8rem;
-    border-bottom: 1px solid #93E0D3;
+    height: 2.1rem;
+    font-size: 0.32rem;
+    border-bottom: 1px solid rgba(255,255,255,0.20);
     > p {
-        text-align: center;
+        text-align: left;
         padding: 0.08rem;
+        padding-left: 0.3rem;
+        margin-bottom: 0.2rem;
+      }
+      .card-no {
+        font-size: 0.28rem;
       }
   }
   .content {
@@ -70,16 +93,29 @@ export default {
     > div {
         flex: 1;
         text-align: center;
-        height: 1.4rem;
-        background: #00CC66;
+        height: 1.32rem;
+        background: #5C92FF;
         color: #ffffff;
       }
     .left {
-      border-right: 1px solid #93E0D3;
+      border-right: 1px solid rgba(255,255,255,0.20);
       padding-top: 0.16rem;
+      > p {
+          margin-top: 0.08rem;
+          font-size: 0.28rem;
+        }
     }
     .right {
       line-height: 1.4rem;
+      font-size: 0.32rem;
+      letter-spacing: 0.03rem;
     }
+  }
+  .icon-img {
+    width: 0.4rem;
+    margin-right: 0.4rem;
+  }
+  .icon-cell {
+    height: 1.16rem;
   }
 </style>

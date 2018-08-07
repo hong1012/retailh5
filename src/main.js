@@ -3,10 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import 'assets/css/base.css'
 
 import YDUI from 'vue-ydui';
 import 'vue-ydui/dist/ydui.rem.css';
+import 'assets/css/base.css'
 
 Vue.use(YDUI);
 

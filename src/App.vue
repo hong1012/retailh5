@@ -5,8 +5,62 @@
 </template>
 
 <script>
+import axios from 'axios'
+import NProgress from 'nprogress'; // Progress 进度条
+import 'nprogress/nprogress.css';// Progress 进度条 样式
 export default {
-  name: 'App'
+  name: 'App',
+  mounted() {
+    this.init();
+  },
+  methods: {
+    init() {
+      // 全局http请求配置
+      axios.interceptors.request.use(request => {
+        NProgress.start()
+        request.params = {
+          dbid: 79121965962,
+          loginName: '13844463@kdc',
+          ver: '1.0',
+          ts: new Date().getTime()
+        }
+        return request;
+      }, error => {
+        return Promise.reject(error)
+      })
+      axios.interceptors.response.use(response => {
+        NProgress.done()
+        if (response.status !== 200) {
+          // 系统级别的错误
+          // Message.error(response.statusText)
+          return Promise.reject(response.statusText)
+        } else {
+          // 业务级别的错误
+          var status = response.data.result
+          var msg = response.data.msg
+          switch (status) {
+            case 200 : return response;
+            case 201 :
+              location.href = response.data.data
+              break;
+            // 处理同一个账号多人登录重定向
+            case 202 :
+              // getDefaultPage().location.href = 'http://downloads.youshang.com/ys/frontend/logout.html';
+              break;
+            default :
+              if (response.data.errcode === 0) {
+                // 云盘的接口这里不会返回200 ，反而是errcode
+                return response;
+              }
+              // Message.error(msg || '未知的系统错误');
+              return Promise.reject(msg)
+          }
+        }
+      }, error => {
+        return Promise.reject(error);
+      })
+    }
+  }
 }
 </script>
 
