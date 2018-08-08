@@ -1,7 +1,7 @@
 <template>
     <div class="g-page">
       <div>
-        <div class="header">
+        <div class="header" @click="getData">
           <p>会员卡</p>
           <p class="card-no">3432123432523533445566</p>
         </div>
@@ -29,7 +29,7 @@
 <script>
 /*eslint-disable*/
 import base from 'pages/base'
-import {apiCard} from 'utils/api'
+import {apiCard, apiTest} from 'utils/api'
 import Vue from 'vue';
 import {CellGroup, CellItem} from 'vue-ydui/dist/lib.rem/cell';
 Vue.component(CellGroup.name, CellGroup);
@@ -52,9 +52,13 @@ export default {
   methods: {
     getData() {
       let params = {"skey":"","nickname":"","info":{"lableName":"","startDate":"","endDate":"","dateRange":"","mobile":"","name":"","type":"","nickname":"","shopid":"","shopname":""},"orderColum":"","orderRule":"","shopid":"","pageIndex":1,"pageSize":20,"fromDate":"","toDate":""}
-      apiCard.list(params).then(res => {
+      apiTest.list(params).then(res => {
         console.log(res)
         this.toast('接口调用可以');
+      });
+      apiCard.getTicket({}).then(res => {
+        console.log(res)
+        this.toast('ticket');
       });
     },
     recharge() {

@@ -8,19 +8,45 @@
 import axios from 'axios'
 import NProgress from 'nprogress'; // Progress 进度条
 import 'nprogress/nprogress.css';// Progress 进度条 样式
+import {getUrlParam} from 'utils/common'
+import {appInfo} from 'utils/appInfo'
+import {apiCard} from 'utils/api'
+
 export default {
   name: 'App',
   mounted() {
     this.init();
   },
   methods: {
+    getUrlParams() {
+      let urlParam = getUrlParam();
+      let dbid = urlParam.dbid || '';
+      let cardId = urlParam.card_id || '';
+      let openId = urlParam.openid || '';
+      appInfo.setData({
+        'dbid': dbid,
+        'cardId': cardId,
+        'openId': openId
+      });
+      return appInfo.getData();
+    },
+    getTicket() {
+      apiCard.getTicket({}).then(res => {
+        console.log('getTicket');
+        console.log(res);
+        let data = res.data || {};
+        appInfo.setTicket(data.ticket || '');
+      });
+    },
     init() {
       // 全局http请求配置
+      this.getTicket();
+      let urlParams = this.getUrlParams();
       axios.interceptors.request.use(request => {
         NProgress.start()
         request.params = {
-          dbid: 79121965962,
-          loginName: '13844463@kdc',
+          dbid: urlParams.dbid || 7911391974,
+          loginName: '',
           ver: '1.0',
           ts: new Date().getTime()
         }
