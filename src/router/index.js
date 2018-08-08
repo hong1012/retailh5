@@ -26,6 +26,11 @@ export default new Router({
       path: '/consume/list',
       meta: {label: '消费记录', keepAlive: true},
       component: resolve => require(['../pages/consume/list'], resolve)
+    },
+    {
+      path: '/consume/detail',
+      meta: {label: '消费详情', keepAlive: true},
+      component: resolve => require(['../pages/consume/detail'], resolve)
     }
   ]
 })

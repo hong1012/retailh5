@@ -30,6 +30,11 @@
 /*eslint-disable*/
 import base from 'pages/base'
 import {apiCard} from 'utils/api'
+import Vue from 'vue';
+import {CellGroup, CellItem} from 'vue-ydui/dist/lib.rem/cell';
+Vue.component(CellGroup.name, CellGroup);
+Vue.component(CellItem.name, CellItem);
+
 let moneyIcon = require('assets/images/money.svg');
 let consumeIcon = require('assets/images/consume.svg');
 

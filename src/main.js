@@ -4,11 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-import YDUI from 'vue-ydui';
-import 'vue-ydui/dist/ydui.rem.css';
+/*import YDUI from 'vue-ydui';
+Vue.use(YDUI);*/
+//import 'vue-ydui/dist/ydui.rem.css';
+// 按需引入
+import 'vue-ydui/dist/ydui.base.css';
 import 'assets/css/base.css'
-
-Vue.use(YDUI);
 
 Vue.config.productionTip = false
 
