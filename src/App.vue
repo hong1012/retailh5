@@ -11,21 +11,30 @@ import 'nprogress/nprogress.css';// Progress 进度条 样式
 import {getUrlParam} from 'utils/common'
 import {appInfo} from 'utils/appInfo'
 import {apiCard} from 'utils/api'
+const testDbid = 7911391974
 
 export default {
   name: 'App',
   mounted() {
     this.init();
+    this.getOpenid();
+    this.getTicket();
   },
   methods: {
     getUrlParams() {
       let urlParam = getUrlParam();
-      let dbid = urlParam.dbid || '';
+      let dbid = urlParam.dbid || testDbid;
       let cardId = urlParam.card_id || '';
-      let openId = urlParam.openid || '';
+      let openidCard = urlParam.openidCard || '';
+      let loginName = urlParam.loginName || '';
+      let uid = urlParam.uid || '';
+      let openId = urlParam.openId || '';
       appInfo.setData({
         'dbid': dbid,
         'cardId': cardId,
+        'openidCard': openidCard,
+        'loginName': loginName,
+        'uid': uid,
         'openId': openId
       });
       return appInfo.getData();
@@ -38,15 +47,50 @@ export default {
         appInfo.setTicket(data.ticket || '');
       });
     },
+    getUrl(aInfo) {
+      let url = 'http://callbk-retail.jdy.com/wx/vip.html#/';
+      //let url = 'http://localhost:8080/#/';
+      //let params = '?card_id=' + aInfo.cardId + '&loginName=' + aInfo.loginName + '&dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard + '&uid=' + aInfo.uid;
+      let params = '?dbid=' + aInfo.dbid + '&card_id=' + aInfo.cardId;
+      //params = encodeURIComponent(params);
+      url = url + params;
+      console.log('url')
+      console.log(url)
+      return url;
+    },
+    getOpenid() {
+      let aInfo = appInfo.getData();
+      let url = this.getUrl(aInfo);
+      let openId = aInfo.openId;
+      if (!openId) {
+        // 如果openid为空则调用接口 获取openid
+        apiCard.getOpenidUrl({
+          'url': url
+        }).then(res => {
+          let data = res.data;
+          let url = data.url || '';
+          if (url) {
+            console.log('getOpenid res')
+            console.log(JSON.stringify(res))
+            console.log('href')
+            console.log(JSON.stringify(window.location.href))
+            window.location.href = url;
+          }
+        });
+      }
+    },
     init() {
       // 全局http请求配置
-      this.getTicket();
       let urlParams = this.getUrlParams();
+      console.log('urlParams');
+      console.log(urlParams);
       axios.interceptors.request.use(request => {
         NProgress.start()
         request.params = {
-          dbid: urlParams.dbid || 7911391974,
-          loginName: '',
+          dbid: urlParams.dbid || testDbid,
+          loginName: urlParams.loginName || '',
+          userid: urlParams.uid || '',
+          openId: urlParams.openId || '',
           ver: '1.0',
           ts: new Date().getTime()
         }

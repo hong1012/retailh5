@@ -22,9 +22,8 @@ export default {
   components: {vEmpty},
   data() {
     return {
-      list: [{'date': '2018-01-02', 'store': '南山店', 'money': 125}, {'date': '2018-01-03', 'store': '福田店', 'money': 54},
-        {'date': '2018-01-04', 'store': '南山店', 'money': 125}],
-      //list: [],
+      list: [{'date': '2018-01-02', 'store': 'xx店', 'money': 1}, {'date': '2018-01-03', 'store': 'xx店', 'money': 2},
+        {'date': '2018-01-04', 'store': 'xx店', 'money': 3}],
       msg: '您还没有充值记录'
     }
   },

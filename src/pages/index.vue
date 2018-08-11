@@ -1,13 +1,14 @@
 <template>
+  <yd-pullrefresh :callback="refresh" ref="refreshCtrl">
     <div class="g-page">
       <div>
-        <div class="header" @click="getData">
+        <div class="header">
           <p>会员卡</p>
-          <p class="card-no">3432123432523533445566</p>
+          <p class="card-no">{{cardid}}</p>
         </div>
         <div class="content">
           <div class="left">
-            <p>100</p>
+            <p>0</p>
             <p>余额</p>
           </div>
           <div class="right" @click="recharge">充值</div>
@@ -24,16 +25,22 @@
         </yd-cell-item>
       </yd-cell-group>
     </div>
+  </yd-pullrefresh>
 </template>
 
 <script>
 /*eslint-disable*/
 import base from 'pages/base'
 import {apiCard, apiTest} from 'utils/api'
+import {appInfo} from 'utils/appInfo'
+
 import Vue from 'vue';
 import {CellGroup, CellItem} from 'vue-ydui/dist/lib.rem/cell';
 Vue.component(CellGroup.name, CellGroup);
 Vue.component(CellItem.name, CellItem);
+
+import {PullRefresh} from 'vue-ydui/dist/lib.rem/pullrefresh';
+Vue.component(PullRefresh.name, PullRefresh);
 
 let moneyIcon = require('assets/images/money.svg');
 let consumeIcon = require('assets/images/consume.svg');
@@ -43,18 +50,26 @@ export default {
   components: {},
   data() {
     return {
+      cardid: '000000000',
       moneyIcon: moneyIcon,
       consumeIcon: consumeIcon
     }
   },
   mounted() {
+    console.log('cardid setting');
+    console.log(appInfo.getData().openId);
+    this.cardid = appInfo.getData().openId || '001';
   },
   methods: {
+    refresh() {
+      this.getData();
+    },
     getData() {
       let params = {"skey":"","nickname":"","info":{"lableName":"","startDate":"","endDate":"","dateRange":"","mobile":"","name":"","type":"","nickname":"","shopid":"","shopname":""},"orderColum":"","orderRule":"","shopid":"","pageIndex":1,"pageSize":20,"fromDate":"","toDate":""}
       apiTest.list(params).then(res => {
         console.log(res)
         this.toast('接口调用可以');
+        this.$refs.refreshCtrl.$emit('ydui.pullrefresh.finishLoad');
       });
       apiCard.getTicket({}).then(res => {
         console.log(res)
