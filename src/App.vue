@@ -18,7 +18,7 @@ export default {
   mounted() {
     this.init();
     this.getOpenid();
-    this.getTicket();
+    //this.getTicket();
   },
   methods: {
     getUrlParams() {
@@ -48,9 +48,9 @@ export default {
       });
     },
     getUrl(aInfo) {
-      let url = 'http://callbk-retail.jdy.com/wx/vip.html#/';
-      //let url = 'http://localhost:8080/#/';
-      //let params = '?card_id=' + aInfo.cardId + '&loginName=' + aInfo.loginName + '&dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard + '&uid=' + aInfo.uid;
+      let url = 'https://callbk-retail.jdy.com/wx/vip.html#/';
+      // let url = 'http://localhost:8080/#/';
+      // let params = '?card_id=' + aInfo.cardId + '&loginName=' + aInfo.loginName + '&dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard + '&uid=' + aInfo.uid;
       let params = '?dbid=' + aInfo.dbid + '&card_id=' + aInfo.cardId;
       //params = encodeURIComponent(params);
       url = url + params;
@@ -74,7 +74,7 @@ export default {
             console.log(JSON.stringify(res))
             console.log('href')
             console.log(JSON.stringify(window.location.href))
-            window.location.href = url;
+            window.location.replace(url);
           }
         });
       }
