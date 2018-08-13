@@ -18,7 +18,6 @@ export default {
   mounted() {
     this.init();
     this.getOpenid();
-    //this.getTicket();
   },
   methods: {
     getUrlParams() {
@@ -39,19 +38,11 @@ export default {
       });
       return appInfo.getData();
     },
-    getTicket() {
-      apiCard.getTicket({}).then(res => {
-        console.log('getTicket');
-        console.log(res);
-        let data = res.data || {};
-        appInfo.setTicket(data.ticket || '');
-      });
-    },
     getUrl(aInfo) {
       let url = 'https://callbk-retail.jdy.com/wx/vip.html#/';
       // let url = 'http://localhost:8080/#/';
-      // let params = '?card_id=' + aInfo.cardId + '&loginName=' + aInfo.loginName + '&dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard + '&uid=' + aInfo.uid;
-      let params = '?dbid=' + aInfo.dbid + '&card_id=' + aInfo.cardId;
+      let params = '?card_id=' + aInfo.cardId + '&loginName=' + aInfo.loginName + '&dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard + '&uid=' + aInfo.uid;
+      // let params = '?dbid=' + aInfo.dbid + '&card_id=' + aInfo.cardId;
       //params = encodeURIComponent(params);
       url = url + params;
       console.log('url')
