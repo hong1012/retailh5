@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
@@ -40,7 +42,6 @@ export default {
     },
     getUrl(aInfo) {
       let url = 'https://callbk-retail.jdy.com/wx/vip.html#/';
-      // let url = 'http://localhost:8080/#/';
       let params = '?card_id=' + aInfo.cardId + '&loginName=' + aInfo.loginName + '&dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard + '&uid=' + aInfo.uid;
       // let params = '?dbid=' + aInfo.dbid + '&card_id=' + aInfo.cardId;
       //params = encodeURIComponent(params);

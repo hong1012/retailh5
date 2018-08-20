@@ -3,10 +3,10 @@
         <ul>
         <li v-for="(item, index) in list" :key="index">
             <div class="left">
-                <p class="name">{{item.store}}</p>
-                <p class="date">{{item.date}}</p>
+                <p class="name">{{item.storeName}}</p>
+                <p class="date">{{item.createTime}}</p>
             </div>
-            <p class="money"><span><span class="flag">￥</span>{{item.money}}</span></p>
+            <p class="money"><span><span class="flag">￥</span>{{item.amt}}</span></p>
         </li>
       </ul>
       <v-empty v-if="list.length == 0" class="empty-view" :msg="msg"></v-empty>
@@ -17,19 +17,40 @@
 import base from 'pages/base'
 import vEmpty from 'src/components/empty'
 
+import {apiCard} from 'utils/api'
+import {appInfo} from 'utils/appInfo'
+import {updateListData, eventBus} from 'utils/common'
+
 export default {
   mixins: [base],
   components: {vEmpty},
   data() {
     return {
-      list: [{'date': '2018-01-02', 'store': 'xx店', 'money': 1}, {'date': '2018-01-03', 'store': 'xx店', 'money': 2},
-        {'date': '2018-01-04', 'store': 'xx店', 'money': 3}],
+      list: [],
       msg: '您还没有充值记录'
     }
   },
   mounted() {
+    this.getData();
   },
-  methods: {},
+  methods: {
+    getData() {
+      let param = {
+        openId: appInfo.getData().openidCard || '',
+        pageIndex: 1,
+        pageSize: 50
+      };
+      return apiCard.queryRechargeRecord(param).then(res => {
+        this.pageResult = res.pageResult;
+        let data = res.data || {};
+        let rows = data.records || [];
+        if (param.pageIndex > 1) {
+          rows = this.list.concat(rows);
+        }
+        updateListData(this.list, rows);
+      });
+    }
+  },
   watch: {},
   computed: {}
 }

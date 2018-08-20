@@ -4,11 +4,11 @@
               <ul slot="list">
                 <li v-for="(item, index) in list" :key="index" @click="itemClick(item)">
                     <div class="left">
-                        <p class="name">{{item.store}}</p>
-                        <p class="date">{{item.date}}</p>
+                        <p class="name">{{item.storeName}}</p>
+                        <p class="date">{{item.payDate}}</p>
                     </div>
-                    <p class="type"><span>{{item.type}}</span></p>
-                    <p class="money"><span><span class="flag">￥</span>{{item.money}}</span></p>
+                    <p class="type"><span>{{item.settleName}}</span></p>
+                    <p class="money"><span><span class="flag">￥</span>{{item.settleamount}}</span></p>
                 </li>
               </ul>
             <!-- 数据全部加载完毕显示 -->
@@ -25,6 +25,10 @@
 import base from 'pages/base'
 import vEmpty from 'src/components/empty'
 
+import {apiCard} from 'utils/api'
+import {appInfo} from 'utils/appInfo'
+import {updateListData, eventBus} from 'utils/common'
+
 import Vue from 'vue';
 import {InfiniteScroll} from 'vue-ydui/dist/lib.rem/infinitescroll';
 Vue.component(InfiniteScroll.name, InfiniteScroll);
@@ -36,41 +40,51 @@ export default {
     return {
       page: 1,
       pageSize: 10,
-      list: [{'date': '2018-01-02', 'store': 'xx店', 'money': 1, 'type': '现金'},
-        {'date': '2018-01-03', 'store': 'xx店', 'money': 2, 'type': '储值卡'},
-        {'date': '2018-01-04', 'store': 'xx店', 'money': 3, 'type': '现金'}],
-      //list: [],
+      pageResult: {},
+      list: [],
       msg: '您还没有消费记录'
     }
   },
   mounted() {
-    for (let i = 1; i < 2; i++) {
-      this.list.push({'date': '2018-01-04', 'store': 'xx店', 'money': 3, 'type': '现金'});
-    }
+    this.getData(1);
   },
   methods: {
     loadList() {
-      if (this.page >= 3) {
+      if (this.page >= this.pageResult.pageCount) {
         /* 所有数据加载完毕 */
         this.$refs.scrollCtrl.$emit('ydui.infinitescroll.loadedDone');
       } else {
         this.page++;
-        this.loadData().then(() => {
+        this.getData(this.page).then(() => {
           /* 单次请求数据完毕 */
           this.$refs.scrollCtrl.$emit('ydui.infinitescroll.finishLoad');
-          this.list.push({'date': '2018-01-04', 'store': 'more xx店', 'money': 3, 'type': '现金'});
         });
       }
     },
-    loadData() {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve();
-        }, 3000);
+    getData(pageIndex) {
+      let param = {
+        beginDate: '',
+        endDate: '',
+        openId: appInfo.getData().openidCard || '',
+        pageIndex: pageIndex || 1,
+        pageSize: 50
+      };
+      return apiCard.queryfundRecord(param).then(res => {
+        this.pageResult = res.pageResult;
+        let data = res.data || {};
+        let rows = data.records || [];
+        if (param.pageIndex > 1) {
+          rows = this.list.concat(rows);
+        }
+        updateListData(this.list, rows);
+        return {};
       });
     },
     itemClick(item) {
-      this.$router.push({path: '/consume/detail'})
+      this.$router.push({path: '/consume/detail'});
+      setTimeout(() => {
+         eventBus.$emit('event-consume-detail', item);
+      }, 200)
     }
   },
   watch: {},

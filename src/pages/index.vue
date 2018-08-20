@@ -1,14 +1,13 @@
 <template>
-  <yd-pullrefresh :callback="refresh" ref="refreshCtrl">
     <div class="g-page">
       <div>
         <div class="header">
-          <p>会员卡</p>
+          <p>{{cardName}}</p>
           <p class="card-no">{{cardid}}</p>
         </div>
         <div class="content">
           <div class="left">
-            <p>0</p>
+            <p>{{money}}</p>
             <p>余额</p>
           </div>
           <div class="right" @click="recharge">充值</div>
@@ -25,7 +24,6 @@
         </yd-cell-item>
       </yd-cell-group>
     </div>
-  </yd-pullrefresh>
 </template>
 
 <script>
@@ -50,30 +48,29 @@ export default {
   components: {},
   data() {
     return {
-      cardid: '000000000',
+      cardName: '会员卡',
+      cardid: '',
+      money: '',
       moneyIcon: moneyIcon,
       consumeIcon: consumeIcon
     }
   },
   mounted() {
-    console.log('cardid setting');
-    console.log(appInfo.getData().openId);
-    this.cardid = appInfo.getData().openId || '001';
+    this.getData();
   },
   methods: {
     refresh() {
       this.getData();
     },
     getData() {
-      let params = {"skey":"","nickname":"","info":{"lableName":"","startDate":"","endDate":"","dateRange":"","mobile":"","name":"","type":"","nickname":"","shopid":"","shopname":""},"orderColum":"","orderRule":"","shopid":"","pageIndex":1,"pageSize":20,"fromDate":"","toDate":""}
-      apiTest.list(params).then(res => {
-        console.log(res)
-        this.toast('接口调用可以');
-        this.$refs.refreshCtrl.$emit('ydui.pullrefresh.finishLoad');
-      });
-      apiCard.getTicket({}).then(res => {
-        console.log(res)
-        this.toast('ticket');
+      let param = {
+        openId: appInfo.getData().openidCard || ''
+      }
+      apiCard.getMbBaseInfo(param).then(res => {
+        let data = res.data || {};
+        this.cardid = data.card || '';
+        this.money = data.rechargeamt || '';
+        this.cardName = data.mbCardName || '';
       });
     },
     recharge() {
@@ -85,9 +82,7 @@ export default {
     consumeList() {
       this.$router.push({path: '/consume/list'})
     }
-  },
-  watch: {},
-  computed: {}
+  }
 }
 </script>
 
