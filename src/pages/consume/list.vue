@@ -83,7 +83,7 @@ export default {
     itemClick(item) {
       this.$router.push({path: '/consume/detail'});
       setTimeout(() => {
-         eventBus.$emit('event-consume-detail', item);
+        eventBus.$emit('event-consume-detail', item);
       }, 200)
     }
   },

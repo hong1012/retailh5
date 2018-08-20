@@ -3,7 +3,7 @@
       <div>
         <div class="header">
           <p>{{cardName}}</p>
-          <p class="card-no">{{cardid}}</p>
+          <p class="card-no">{{cardid}}<span></span></p>
         </div>
         <div class="content">
           <div class="left">
@@ -50,6 +50,7 @@ export default {
     return {
       cardName: '会员卡',
       cardid: '',
+      name: '',
       money: '',
       moneyIcon: moneyIcon,
       consumeIcon: consumeIcon
@@ -71,6 +72,8 @@ export default {
         this.cardid = data.card || '';
         this.money = data.rechargeamt || '';
         this.cardName = data.mbCardName || '';
+        this.name = data.name || '';
+        appInfo.setCardInfo(data);
       });
     },
     recharge() {
