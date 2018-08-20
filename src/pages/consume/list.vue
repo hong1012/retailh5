@@ -9,6 +9,7 @@
                     </div>
                     <p class="type"><span>{{item.settleName}}</span></p>
                     <p class="money"><span><span class="flag">￥</span>{{item.settleamount}}</span></p>
+                    <img class="arrow-right" :src="arrowIcon"/>
                 </li>
               </ul>
             <!-- 数据全部加载完毕显示 -->
@@ -32,12 +33,14 @@ import {updateListData, eventBus} from 'utils/common'
 import Vue from 'vue';
 import {InfiniteScroll} from 'vue-ydui/dist/lib.rem/infinitescroll';
 Vue.component(InfiniteScroll.name, InfiniteScroll);
+let arrowIcon = require('assets/images/right.png');
 
 export default {
   mixins: [base],
   components: {vEmpty},
   data() {
     return {
+      arrowIcon: arrowIcon,
       page: 1,
       pageSize: 10,
       pageResult: {},
@@ -95,6 +98,11 @@ export default {
 <style  lang="scss" scoped>
   .empty-view {
         padding-top: 1.5rem;
+  }
+  .arrow-right {
+      width: 0.2rem;
+      height: 0.38rem;
+      margin-top: 0.4rem;
   }
   ul {
     > li {
