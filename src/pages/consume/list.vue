@@ -1,24 +1,25 @@
 <template>
     <div class="g-page">
-        <yd-infinitescroll :callback="loadList" ref="scrollCtrl">
-              <ul slot="list">
-                <li v-for="(item, index) in list" :key="index" @click="itemClick(item)">
-                    <div class="left">
-                        <p class="name">{{item.storeName}}</p>
-                        <p class="date">{{item.payDate}}</p>
-                    </div>
-                    <p class="type"><span>{{item.settleName}}</span></p>
-                    <p class="money"><span><span class="flag">￥</span>{{item.settleamount}}</span></p>
-                    <img class="arrow-right" :src="arrowIcon"/>
-                </li>
-              </ul>
-            <!-- 数据全部加载完毕显示 -->
-            <span slot="doneTip">我的底线在这里,没有更多数据啦</span>
-            <!-- 加载中提示，不指定，将显示默认加载中图标 -->
-            <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>
-        </yd-infinitescroll>
-      <v-empty v-if="list.length == 0" class="empty-view" :msg="msg"></v-empty>
-
+        <yd-pullrefresh :callback="refresh" ref="refreshCtrl">
+            <yd-infinitescroll :callback="loadList" ref="scrollCtrl">
+                  <ul slot="list">
+                    <li v-for="(item, index) in list" :key="index" @click="itemClick(item)">
+                        <div class="left">
+                            <p class="name">{{item.storeName}}</p>
+                            <p class="date">{{item.payDate}}</p>
+                        </div>
+                        <p class="type"><span>{{item.settleName}}</span></p>
+                        <p class="money"><span><span class="flag">￥</span>{{item.settleamount}}</span></p>
+                        <img class="arrow-right" :src="arrowIcon"/>
+                    </li>
+                  </ul>
+                <!-- 数据全部加载完毕显示 -->
+                <span slot="doneTip">我的底线在这里,没有更多数据啦</span>
+                <!-- 加载中提示，不指定，将显示默认加载中图标 -->
+                <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>
+            </yd-infinitescroll>
+            <v-empty v-if="list.length == 0" class="empty-view" :msg="msg"></v-empty>
+        </yd-pullrefresh>
     </div>
 </template>
 
@@ -53,6 +54,12 @@ export default {
     this.getData(1);
   },
   methods: {
+    refresh() {
+      this.page = 1;
+      this.getData(1).then(() => {
+        this.$refs.refreshCtrl.$emit('ydui.pullrefresh.finishLoad');
+      });
+    },
     loadList() {
       if (this.page >= this.pageResult.pageCount) {
         /* 所有数据加载完毕 */

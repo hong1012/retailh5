@@ -1,15 +1,17 @@
 <template>
     <div class="g-page">
-        <ul>
-        <li v-for="(item, index) in list" :key="index">
-            <div class="left">
-                <p class="name">{{item.storeName}}</p>
-                <p class="date">{{item.createTime}}</p>
-            </div>
-            <p class="money"><span><span class="flag">￥</span>{{item.amt}}</span></p>
-        </li>
-      </ul>
-      <v-empty v-if="list.length == 0" class="empty-view" :msg="msg"></v-empty>
+        <yd-pullrefresh :callback="refresh" ref="refreshCtrl">
+            <ul>
+            <li v-for="(item, index) in list" :key="index">
+                <div class="left">
+                    <p class="name">{{item.storeName}}</p>
+                    <p class="date">{{item.createTime}}</p>
+                </div>
+                <p class="money"><span><span class="flag">￥</span>{{item.amt}}</span></p>
+            </li>
+          </ul>
+          <v-empty v-if="list.length == 0" class="empty-view" :msg="msg"></v-empty>
+        </yd-pullrefresh>
     </div>
 </template>
 
@@ -20,6 +22,10 @@ import vEmpty from 'src/components/empty'
 import {apiCard} from 'utils/api'
 import {appInfo} from 'utils/appInfo'
 import {updateListData, eventBus} from 'utils/common'
+
+import Vue from 'vue';
+import {PullRefresh} from 'vue-ydui/dist/lib.rem/pullrefresh';
+Vue.component(PullRefresh.name, PullRefresh);
 
 export default {
   mixins: [base],
@@ -34,6 +40,11 @@ export default {
     this.getData();
   },
   methods: {
+    refresh() {
+      this.getData().then(() => {
+        this.$refs.refreshCtrl.$emit('ydui.pullrefresh.finishLoad');
+      });
+    },
     getData() {
       let param = {
         openId: appInfo.getData().openidCard || '',

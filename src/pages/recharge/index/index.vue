@@ -84,7 +84,7 @@ export default {
     this.curBox = this.itemInput;
     this.loading();
     this.getStoreList().then(storeList => {
-      this.getDisInfo();
+      this.getDisInfo(storeList);
       this.getRechargeList(this.curStore.id, '').then(res => {
         this.loading(false);
       }).catch(() => {
@@ -103,22 +103,20 @@ export default {
     }
   },
   methods: {
-    getDisInfo() {
+    getDisInfo(storeList) {
       let appId = appInfo.carInfo.appId || '';
       apiCard.getTicket({}).then(res => {
         let data = res.data || {};
         let ticket = data.ticket || '';
-        wxSign(appId, ticket).then(() = > {
+        wxSign(appId, ticket).then(() => {
           getLocation().then(dinfo => {
             // 计算用户与门店的距离
             storeList.forEach(store => {
-              // store.distance = store.lat + store.lng;
-              console.log('getDistance');
               let dis = '';
               let lat = Number(store.lat);
               let lng = Number(store.lng);
               if (lat !== 0 || lng !== 0) {
-                dis = (dinfo.lat, dinfo.lng, lat, lng).toFixed(2);
+                dis = getDistance(dinfo.lat, dinfo.lng, lat, lng).toFixed(2);
                 store.unit = '公里';
               }
               store.distance = dis;

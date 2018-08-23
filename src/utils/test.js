@@ -1,27 +1,34 @@
-// 每隔1秒,按顺序打印 1 2 3 4 5
-function log() {
-  var sum = 0;/
-}
-log()
 
-// 实现一个深拷贝函数
-function deepCopy() {
-
+const EARTH_RADIUS = 6378137.0;
+const PI = Math.PI;
+function getRad(d) {
+  return d * PI / 180.0;
 }
 
-
-// 把一个列表结构,转换成树状结构
-var list = [
-  {id:1, pid:20, name: '龙眼'},
-  {id:2, pid:20, name: '荔枝'},
-  {id:3, pid:20, name: '哈密瓜'},
-  {id:4, pid:22, name: '上衣'},
-  {id:5, pid:22, name: '裤子'},
-  {id:20, pid:21, name: '水果'},
-  {id:21, pid:0, name: '生鲜'},
-  {id:22, pid:0, name: '衣服'}
-]
-// [ {id:1, pid:20, name: '龙眼', children:[]}]
-function toTree(list) {
-
+// 计算经纬度之间的距离
+function getDistance(lat1, lng1, lat2, lng2) {
+  let f = getRad((lat1 + lat2) / 2);
+  let g = getRad((lat1 - lat2) / 2);
+  let l = getRad((lng1 - lng2) / 2);
+  let sg = Math.sin(g);
+  let sl = Math.sin(l);
+  let sf = Math.sin(f);
+  let s, c, w, r, d, h1, h2;
+  let a = EARTH_RADIUS;
+  let fl = 1 / 298.257;
+  sg = sg * sg;
+  sl = sl * sl;
+  sf = sf * sf;
+  s = sg * (1 - sl) + (1 - sf) * sl;
+  c = (1 - sg) * (1 - sl) + sf * sl;
+  w = Math.atan(Math.sqrt(s / c));
+  r = Math.sqrt(s * c) / w;
+  d = 2 * w * a;
+  h1 = (3 * r - 1) / 2 / c;
+  h2 = (3 * r + 1) / 2 / s;
+  let dis = d * (1 + fl * (h1 * sf * (1 - sg) - h2 * (1 - sf) * sg));
+  return dis / 1000;
 }
+
+console.log(getDistance(22.53332,113.93041, 22.539718, 113.961529))
+console.log(getDistance(22.53332,113.93041, 31.661208, 118.514369))
