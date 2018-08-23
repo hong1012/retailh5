@@ -3,7 +3,7 @@
       <div>
         <div class="header">
           <p>{{cardName}}</p>
-          <p class="card-no">{{cardid}}<span></span></p>
+          <p class="card-no">{{cardid}}</p>
         </div>
         <div class="content">
           <div class="left">
@@ -23,6 +23,7 @@
           <span slot="left">消费记录</span>
         </yd-cell-item>
       </yd-cell-group>
+      <v-loading v-if="false" msg="正在登录中,请稍候.."></v-loading>
     </div>
 </template>
 
@@ -31,6 +32,7 @@
 import base from 'pages/base'
 import {apiCard, apiTest} from 'utils/api'
 import {appInfo} from 'utils/appInfo'
+import {eventBus} from 'utils/common'
 
 import Vue from 'vue';
 import {CellGroup, CellItem} from 'vue-ydui/dist/lib.rem/cell';
@@ -40,29 +42,42 @@ Vue.component(CellItem.name, CellItem);
 import {PullRefresh} from 'vue-ydui/dist/lib.rem/pullrefresh';
 Vue.component(PullRefresh.name, PullRefresh);
 
+import vLoading from 'src/components/loading'
+import { Loading } from 'vue-ydui/dist/lib.rem/dialog';
+
 let moneyIcon = require('assets/images/money.svg');
 let consumeIcon = require('assets/images/consume.svg');
 
 export default {
   mixins: [base],
-  components: {},
+  components: {vLoading},
   data() {
     return {
       cardName: '会员卡',
       cardid: '',
+      openId: '',
       name: '',
       money: '',
       moneyIcon: moneyIcon,
       consumeIcon: consumeIcon
     }
   },
+  created() {
+    eventBus.$on('event-recharge-index', events => {
+      this.getData();
+    });
+  },
+  destroyed() {
+    eventBus.$off('event-recharge-index');
+  },
   mounted() {
     this.getData();
+    this.openId = appInfo.getData().openId;
+    if (!this.openId) {
+      this.loading('正在登录中,请稍候..');
+    }
   },
   methods: {
-    refresh() {
-      this.getData();
-    },
     getData() {
       let param = {
         openId: appInfo.getData().openidCard || ''
@@ -90,6 +105,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
   .header {
     display: flex;
     flex-direction: column;

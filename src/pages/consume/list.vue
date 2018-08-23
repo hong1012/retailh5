@@ -49,6 +49,7 @@ export default {
     }
   },
   mounted() {
+    this.loading();
     this.getData(1);
   },
   methods: {
@@ -73,6 +74,7 @@ export default {
         pageSize: 50
       };
       return apiCard.queryfundRecord(param).then(res => {
+        this.loading(false);
         this.pageResult = res.pageResult;
         let data = res.data || {};
         let rows = data.records || [];
@@ -81,6 +83,8 @@ export default {
         }
         updateListData(this.list, rows);
         return {};
+      }).catch(() => {
+        this.loading(false);
       });
     },
     itemClick(item) {

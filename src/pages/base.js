@@ -14,6 +14,14 @@ export default {
         mes: msg,
         timeout: 1500
       });
+    },
+    loading(msg) {
+      if (typeof msg === 'boolean') {
+        Loading.close();
+      } else {
+        msg = msg || '正在加载,请稍候..';
+        Loading.open(msg);
+      }
     }
   }
 }

@@ -13,7 +13,8 @@ import 'nprogress/nprogress.css';// Progress 进度条 样式
 import {getUrlParam} from 'utils/common'
 import {appInfo} from 'utils/appInfo'
 import {apiCard} from 'utils/api'
-const testDbid = 7911391974
+import {Toast} from 'vue-ydui/dist/lib.rem/dialog';
+const testDbid = ''
 
 export default {
   name: 'App',
@@ -30,10 +31,11 @@ export default {
       let loginName = urlParam.loginName || '';
       let uid = urlParam.uid || '';
       let openId = urlParam.openId || '';
+      // alert('cardId:' + cardId);
       appInfo.setData({
         'dbid': dbid,
-        'cardId': cardId,
         'openidCard': openidCard,
+        'cardId': cardId,
         'loginName': loginName,
         'uid': uid,
         'openId': openId
@@ -41,13 +43,12 @@ export default {
       return appInfo.getData();
     },
     getUrl(aInfo) {
+      // let url = 'http://callbk-retail.jdy.com/wx/vip.html#/';
       let url = 'https://callbk-retail.jdy.com/wx/vip.html#/';
-      let params = '?card_id=' + aInfo.cardId + '&loginName=' + aInfo.loginName + '&dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard + '&uid=' + aInfo.uid;
-      // let params = '?dbid=' + aInfo.dbid + '&card_id=' + aInfo.cardId;
+      // let params = '?card_id=' + aInfo.cardId + '&loginName=' + aInfo.loginName + '&dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard + '&uid=' + aInfo.uid;
+      let params = '?dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard; // + '&card_id=' + aInfo.cardId
       //params = encodeURIComponent(params);
       url = url + params;
-      console.log('url')
-      console.log(url)
       return url;
     },
     getOpenid() {
@@ -62,10 +63,6 @@ export default {
           let data = res.data;
           let url = data.url || '';
           if (url) {
-            console.log('getOpenid res')
-            console.log(JSON.stringify(res))
-            console.log('href')
-            console.log(JSON.stringify(window.location.href))
             window.location.replace(url);
           }
         });
@@ -74,8 +71,6 @@ export default {
     init() {
       // 全局http请求配置
       let urlParams = this.getUrlParams();
-      console.log('urlParams');
-      console.log(urlParams);
       axios.interceptors.request.use(request => {
         NProgress.start()
         request.params = {
@@ -114,7 +109,11 @@ export default {
                 // 云盘的接口这里不会返回200 ，反而是errcode
                 return response;
               }
-              // Message.error(msg || '未知的系统错误');
+              let errMsg = msg || '未知的系统错误';
+              Toast({
+                mes: errMsg,
+                timeout: 5000
+              });
               return Promise.reject(msg)
           }
         }

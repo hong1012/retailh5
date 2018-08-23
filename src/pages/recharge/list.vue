@@ -40,7 +40,9 @@ export default {
         pageIndex: 1,
         pageSize: 50
       };
+      this.loading();
       return apiCard.queryRechargeRecord(param).then(res => {
+        this.loading(false);
         this.pageResult = res.pageResult;
         let data = res.data || {};
         let rows = data.records || [];
@@ -48,6 +50,8 @@ export default {
           rows = this.list.concat(rows);
         }
         updateListData(this.list, rows);
+      }).catch(() => {
+        this.loading(false);
       });
     }
   },
