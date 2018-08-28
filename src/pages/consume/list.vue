@@ -108,7 +108,8 @@ export default {
 
 <style  lang="scss" scoped>
   .empty-view {
-        padding-top: 1.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 5rem;
   }
   .arrow-right {
       width: 0.2rem;

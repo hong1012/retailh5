@@ -152,6 +152,20 @@ function getDistance(lat1, lng1, lat2, lng2) {
   return dis / 1000;
 }
 
+// 数组排序 按什么字段排序 以及升序 降序
+function sortByField(field, orderRule) {
+  let sort = orderRule === 'asc' ? 1 : -1;
+  return function(a, b) {
+    if (a[field] > b[field]) {
+      return 1 * sort;
+    } else if (a[field] < b[field]) {
+      return -1 * sort;
+    } else {
+      return 0;
+    }
+  }
+}
+
 export {eventBus, getUrlParam, formatDate, getDay, updateListData}
 export {getStore, setStore}
-export {limitNumber, getDistance}
+export {limitNumber, getDistance, sortByField}

@@ -52,6 +52,7 @@ export default {
       return url;
     },
     getOpenid() {
+      console.log('getOpenid');
       let aInfo = appInfo.getData();
       let url = this.getUrl(aInfo);
       let openId = aInfo.openId;

@@ -46,7 +46,7 @@ import boxInput from './boxInput.vue'
 import {wxSign, wxPay, getLocation} from 'utils/wx'
 import {apiCard} from 'utils/api'
 import {appInfo} from 'utils/appInfo'
-import {formatDate, updateListData, eventBus, getDistance} from 'utils/common'
+import {formatDate, updateListData, eventBus, getDistance, sortByField} from 'utils/common'
 
 import Vue from 'vue';
 import {Button} from 'vue-ydui/dist/lib.rem/button';
@@ -111,16 +111,18 @@ export default {
         wxSign(appId, ticket).then(() => {
           getLocation().then(dinfo => {
             // 计算用户与门店的距离
+            // this.toast('定位信息 ' + JSON.stringify(dinfo));
             storeList.forEach(store => {
               let dis = '';
               let lat = Number(store.lat);
               let lng = Number(store.lng);
               if (lat !== 0 || lng !== 0) {
-                dis = getDistance(dinfo.lat, dinfo.lng, lat, lng).toFixed(2);
+                dis = Number(getDistance(Number(dinfo.lat), Number(dinfo.lng), lat, lng).toFixed(2));
                 store.unit = '公里';
               }
               store.distance = dis;
             });
+            storeList.sort(sortByField('distance', 'asc'));
           });
         });
       });
@@ -209,9 +211,11 @@ export default {
       // let nonceStr = Math.random().toString(36).substr(2, 4);
       return 'wx' + time; // + '-' + nonceStr;
     },
-    checkPayStatus(params) {
+    checkPayStatus(params, bChecking) {
       // alert(JSON.stringify(params));
-      this.loading('正在充值,请稍候..');
+      if (!bChecking) {
+        this.loading('正在充值,请稍候..');
+      }
       apiCard.getPayStatus(params).then(res => {
         let data = res.data || {};
         let status = data.status || 0;
@@ -223,12 +227,12 @@ export default {
           this.$router.push({path: '/'});
         } else {
           setTimeout(() => {
-            this.checkPayStatus(params);
+            this.checkPayStatus(params, true);
           }, 300);
         }
       }).catch(() => {
         setTimeout(() => {
-          this.checkPayStatus(params);
+          this.checkPayStatus(params, true);
         }, 300);
       });
     },
