@@ -1,7 +1,7 @@
 /*eslint-disable*/
 'use strict';
 
-let stringifyPrimitive = function(v) {
+function stringifyPrimitive(v) {
   switch (typeof v) {
     case 'string':
       return v;
