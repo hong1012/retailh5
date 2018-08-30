@@ -131,6 +131,7 @@ export default {
       this.showPopup = false;
       Object.assign(this.curStore, store);
       this.getRechargeList(this.curStore.id, '');
+      this.getRechargeList(this.curStore.id, Number(this.itemInput.money));
     },
     itemChange(item) {
       this.getRechargeList(this.curStore.id, item.money);
