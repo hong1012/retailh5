@@ -80,6 +80,9 @@ export default {
       boxLoading: false
     }
   },
+  activated() {
+    this.setTitle('会员充值');
+  },
   mounted() {
     this.curBox = this.itemInput;
     this.loading();

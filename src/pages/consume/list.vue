@@ -49,6 +49,9 @@ export default {
       msg: '您还没有消费记录'
     }
   },
+  activated() {
+    this.setTitle('消费记录');
+  },
   mounted() {
     this.loading();
     this.getData(1);

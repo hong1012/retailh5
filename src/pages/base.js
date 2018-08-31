@@ -9,6 +9,9 @@ export default {
     }
   },
   methods: {
+    setTitle(title) {
+      document.title = title;
+    },
     toast(msg) {
       Toast({
         mes: msg,

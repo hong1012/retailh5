@@ -23,7 +23,6 @@
           <span slot="left">消费记录</span>
         </yd-cell-item>
       </yd-cell-group>
-      <v-loading v-if="false" msg="正在登录中,请稍候.."></v-loading>
     </div>
 </template>
 
@@ -42,7 +41,6 @@ Vue.component(CellItem.name, CellItem);
 import {PullRefresh} from 'vue-ydui/dist/lib.rem/pullrefresh';
 Vue.component(PullRefresh.name, PullRefresh);
 
-import vLoading from 'src/components/loading'
 import { Loading } from 'vue-ydui/dist/lib.rem/dialog';
 
 let moneyIcon = require('assets/images/money.svg');
@@ -50,7 +48,7 @@ let consumeIcon = require('assets/images/consume.svg');
 
 export default {
   mixins: [base],
-  components: {vLoading},
+  components: {},
   data() {
     return {
       cardName: '会员卡',
@@ -69,6 +67,9 @@ export default {
   },
   destroyed() {
     eventBus.$off('event-recharge-index');
+  },
+  activated() {
+    this.setTitle('会员卡');
   },
   mounted() {
     this.getData();
@@ -89,6 +90,8 @@ export default {
         this.cardName = data.mbCardName || '';
         this.name = data.name || '';
         appInfo.setCardInfo(data);
+      }).catch(() => {
+        this.loading(false);
       });
     },
     recharge() {

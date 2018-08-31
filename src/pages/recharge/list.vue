@@ -36,6 +36,9 @@ export default {
       msg: '您还没有充值记录'
     }
   },
+  activated() {
+    this.setTitle('充值记录');
+  },
   mounted() {
     this.getData();
   },
