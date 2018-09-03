@@ -137,7 +137,14 @@ export default {
       this.getRechargeList(this.curStore.id, Number(this.itemInput.money));
     },
     itemChange(item) {
-      this.getRechargeList(this.curStore.id, item.money);
+      if (item.money === '') {
+        Object.assign(this.itemInput, {
+          'gmoney': 0,
+          'gpoint': 0
+        });
+      } else {
+        this.getRechargeList(this.curStore.id, item.money);
+      }
     },
     getRechargeList(storeid, money) {
       let param = {
@@ -317,13 +324,22 @@ export default {
     .title {
       color: #8C96A0;
       padding-left: 0.4rem;
+      display: inline-block;
+      overflow: hidden;
     }
     .name {
       color: #001400;
       padding: 0 0.2rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 200px;
+      display: inline-block;
     }
     .change {
       color: #FF5451;
+      overflow: hidden;
+      display: inline-block;
     }
   }
   .box-list {

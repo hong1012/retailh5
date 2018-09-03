@@ -44,8 +44,8 @@ export default {
     },
     getUrl(aInfo) {
       // let url = 'http://callbk-retail.jdy.com/wx/vip.html#/';
-      // let url = 'https://callbk-retail.jdy.com/wx/vip.html#/';
-      let url = '/wx/vip.html#/';
+      let url = 'https://callbk-retail.jdy.com/wx/vip.html#/';
+      // let url = '/wx/vip.html#/';
       // let params = '?card_id=' + aInfo.cardId + '&loginName=' + aInfo.loginName + '&dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard + '&uid=' + aInfo.uid;
       let params = '?dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard; // + '&card_id=' + aInfo.cardId
       //params = encodeURIComponent(params);

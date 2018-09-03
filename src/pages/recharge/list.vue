@@ -1,7 +1,7 @@
 <template>
-    <div class="g-page">
-        <yd-pullrefresh :callback="refresh" ref="refreshCtrl">
-            <ul>
+    <div class="g-page  list-view">
+        <yd-pullrefresh :callback="refresh" ref="refreshCtrl"  class="load-more">
+          <ul  v-if="list.length > 0" :style="ulStyle">
             <li v-for="(item, index) in list" :key="index">
                 <div class="left">
                     <p class="name">{{item.storeName}}</p>
@@ -33,6 +33,7 @@ export default {
   data() {
     return {
       list: [],
+      ulStyle: {minHeight: '300px'},
       msg: '您还没有充值记录'
     }
   },
@@ -41,6 +42,7 @@ export default {
   },
   mounted() {
     this.getData();
+    this.ulStyle.minHeight = document.body.clientHeight + 'px';
   },
   methods: {
     refresh() {
@@ -91,6 +93,7 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: center;
+          flex: 3;
           .name {
             color: #28323C;
           }
@@ -108,6 +111,10 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: center;
+          flex: 1;
+          >span {
+            text-align: right;
+           }
       }
   }
 </style>

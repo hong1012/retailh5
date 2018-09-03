@@ -1,8 +1,8 @@
 <template>
-    <div class="g-page">
+    <div class="g-page list-view">
         <yd-pullrefresh :callback="refresh" ref="refreshCtrl">
-            <yd-infinitescroll :callback="loadList" ref="scrollCtrl">
-                  <ul slot="list">
+            <yd-infinitescroll :callback="loadList" ref="scrollCtrl" class="load-more">
+                  <ul v-if="list.length > 0" slot="list" :style="ulStyle">
                     <li v-for="(item, index) in list" :key="index" @click="itemClick(item)">
                         <div class="left">
                             <p class="name">{{item.storeName}}</p>
@@ -46,6 +46,7 @@ export default {
       pageSize: 10,
       pageResult: {},
       list: [],
+      ulStyle: {minHeight: '300px'},
       msg: '您还没有消费记录'
     }
   },
@@ -55,6 +56,7 @@ export default {
   mounted() {
     this.loading();
     this.getData(1);
+    this.ulStyle.minHeight = document.body.clientHeight + 'px';
   },
   methods: {
     refresh() {
@@ -120,6 +122,7 @@ export default {
       margin-top: 0.4rem;
   }
   ul {
+      min-height: 200px;
     > li {
         padding: 0 0.4rem;
         display: flex;
@@ -131,6 +134,7 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: center;
+          flex: 3;
           .name {
             color: #28323C;
           }
@@ -143,8 +147,12 @@ export default {
       .type {
           color: #28323C;
           display: flex;
+          flex: 1;
           flex-direction: column;
           justify-content: center;
+          >span {
+            text-align: left;
+           }
       }
       .flag {
           color: #28323C;
@@ -152,8 +160,12 @@ export default {
       .money {
           font-size: 0.36rem;
           display: flex;
+          flex: 1;
           flex-direction: column;
           justify-content: center;
+          >span {
+            text-align: left;
+           }
       }
   }
 </style>

@@ -57,7 +57,7 @@ export default {
   .box {
     display: inline-block;
     border: 1px solid #bebebe;
-    margin: 0.36rem 0 0 0.36rem;
+    margin: 0.36rem 0 0 0.3rem;
     border-radius: 4px;
     background: #ffffff;
     height: 2rem;
