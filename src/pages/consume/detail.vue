@@ -3,7 +3,7 @@
         <yd-preview :buttons="[]">
             <yd-preview-header>
                 <div slot="left">消费金额</div>
-                <div slot="right">{{item.settleamount}}</div>
+                <div slot="right">￥{{item.settleamount}}</div>
             </yd-preview-header>
             <yd-preview-item>
                 <div slot="left">店铺</div>
@@ -57,6 +57,8 @@ export default {
     eventBus.$on('event-consume-detail', events => {
       Object.assign(this.item, events);
     });
+    //通知list 本页面已异步加载完
+    eventBus.$emit('event-consume-detail-create');
   },
   destroyed() {
     eventBus.$off('event-consume-detail');

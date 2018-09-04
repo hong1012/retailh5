@@ -166,6 +166,22 @@ function sortByField(field, orderRule) {
   }
 }
 
+// 取n位小数位数, 小数位数 小于 point数的, 原值返回.
+function numFix(value, point) {
+  let num = value + '';
+  let ipoint = num.indexOf('.');
+  if (ipoint >= 0 ) {
+    ipoint = num.length - ipoint - 1;
+    if (ipoint < point) {
+      return value;
+    } else {
+      return Number(value).toFixed(point)
+    }
+  } else {
+    return value;
+  }
+}
+
 export {eventBus, getUrlParam, formatDate, getDay, updateListData}
 export {getStore, setStore}
-export {limitNumber, getDistance, sortByField}
+export {limitNumber, getDistance, sortByField, numFix}

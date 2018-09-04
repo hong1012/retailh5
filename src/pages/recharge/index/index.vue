@@ -46,7 +46,7 @@ import boxInput from './boxInput.vue'
 import {wxSign, wxPay, getLocation} from 'utils/wx'
 import {apiCard} from 'utils/api'
 import {appInfo} from 'utils/appInfo'
-import {formatDate, updateListData, eventBus, getDistance, sortByField} from 'utils/common'
+import {formatDate, updateListData, eventBus, getDistance, sortByField, numFix} from 'utils/common'
 
 import Vue from 'vue';
 import {Button} from 'vue-ydui/dist/lib.rem/button';
@@ -161,8 +161,8 @@ export default {
             console.log(listData[0]);
             let aitem = listData[0];
             Object.assign(this.itemInput, {
-              'gmoney': aitem.gmoney,
-              'gpoint': aitem.gpoint
+              'gmoney': numFix(aitem.gmoney, 2),
+              'gpoint': numFix(aitem.gpoint, 2)
             });
           }
         } else {

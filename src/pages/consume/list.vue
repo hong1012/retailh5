@@ -14,7 +14,7 @@
                     </li>
                   </ul>
                 <!-- 数据全部加载完毕显示 -->
-                <span slot="doneTip">我的底线在这里,没有更多数据啦</span>
+                <span slot="doneTip">已到底部,没有更多数据了</span>
                 <!-- 加载中提示，不指定，将显示默认加载中图标 -->
                 <img slot="loadingTip" src="http://static.ydcss.com/uploads/ydui/loading/loading10.svg"/>
             </yd-infinitescroll>
@@ -46,9 +46,18 @@ export default {
       pageSize: 10,
       pageResult: {},
       list: [],
+      curItemClick: {},
       ulStyle: {minHeight: '300px'},
       msg: '您还没有消费记录'
     }
+  },
+  created() {
+    eventBus.$on('event-consume-detail-create', () => {
+      eventBus.$emit('event-consume-detail', this.curItemClick);
+    });
+  },
+  destroyed() {
+    eventBus.$off('event-consume-detail-create');
   },
   activated() {
     this.setTitle('消费记录');
@@ -100,10 +109,9 @@ export default {
       });
     },
     itemClick(item) {
+      this.curItemClick = item;
       this.$router.push({path: '/consume/detail'});
-      setTimeout(() => {
-        eventBus.$emit('event-consume-detail', item);
-      }, 200)
+      eventBus.$emit('event-consume-detail', item);
     }
   },
   watch: {},
@@ -134,6 +142,7 @@ export default {
           display: flex;
           flex-direction: column;
           justify-content: center;
+
           flex: 3;
           .name {
             color: #28323C;
@@ -150,8 +159,15 @@ export default {
           flex: 1;
           flex-direction: column;
           justify-content: center;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
           >span {
             text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
            }
       }
       .flag {
@@ -161,6 +177,7 @@ export default {
           font-size: 0.36rem;
           display: flex;
           flex: 1;
+
           flex-direction: column;
           justify-content: center;
           >span {
