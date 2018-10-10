@@ -170,12 +170,12 @@ function sortByField(field, orderRule) {
 function numFix(value, point) {
   let num = value + '';
   let ipoint = num.indexOf('.');
-  if (ipoint >= 0 ) {
+  if (ipoint >= 0) {
     ipoint = num.length - ipoint - 1;
     if (ipoint < point) {
       return value;
     } else {
-      return Number(value).toFixed(point)
+      return Number(Number(value).toFixed(point))
     }
   } else {
     return value;

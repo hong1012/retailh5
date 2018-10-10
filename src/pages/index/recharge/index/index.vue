@@ -260,6 +260,7 @@ export default {
         cardId: aInfo.cardId,
         openId: aInfo.openId
       }
+      this.loading('正在提交充值信息...');
       apiCard.getPrepayId(params).then(res => {
         let payInfo = res.data || {};
         let appId = payInfo.appId || '';
@@ -267,6 +268,7 @@ export default {
         apiCard.getTicket({}).then(res => {
           let data = res.data || {};
           let ticket = data.ticket || '';
+          this.loading(false);
           wxSign(appId, ticket).then(() => {
             wxPay(payInfo, () => {
               let checkParams = {
@@ -281,7 +283,11 @@ export default {
               this.checkPayStatus(checkParams);
             });
           });
+        }).catch(() => {
+          this.loading(false);
         });
+      }).catch(() => {
+        this.loading(false);
       });
     }
   }

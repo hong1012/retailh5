@@ -24,51 +24,13 @@ export default {
   },
   methods: {
     getUrlParams() {
-      let urlParam = getUrlParam();
-      let dbid = urlParam.dbid || testDbid;
-      let cardId = urlParam.card_id || '';
-      let openidCard = urlParam.openidCard || '';
-      let loginName = urlParam.loginName || '';
-      let uid = urlParam.uid || '';
-      let openId = urlParam.openId || '';
-      // alert('cardId:' + cardId);
-      appInfo.setData({
-        'dbid': dbid,
-        'openidCard': openidCard,
-        'cardId': cardId,
-        'loginName': loginName,
-        'uid': uid,
-        'openId': openId
-      });
-      return appInfo.getData();
+
     },
     getUrl(aInfo) {
-      // let url = 'http://callbk-retail.jdy.com/wx/vip.html#/';
-      let url = 'https://callbk-retail.jdy.com/wx/vip.html#/';
-      // let url = '/wx/vip.html#/';
-      // let params = '?card_id=' + aInfo.cardId + '&loginName=' + aInfo.loginName + '&dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard + '&uid=' + aInfo.uid;
-      let params = '?dbid=' + aInfo.dbid + '&openidCard=' + aInfo.openidCard; // + '&card_id=' + aInfo.cardId
-      //params = encodeURIComponent(params);
-      url = url + params;
-      return url;
+
     },
     getOpenid() {
-      console.log('getOpenid');
-      let aInfo = appInfo.getData();
-      let url = this.getUrl(aInfo);
-      let openId = aInfo.openId;
-      if (!openId) {
-        // 如果openid为空则调用接口 获取openid
-        apiCard.getOpenidUrl({
-          'url': url
-        }).then(res => {
-          let data = res.data;
-          let url = data.url || '';
-          if (url) {
-            window.location.replace(url);
-          }
-        });
-      }
+
     },
     init() {
       // 全局http请求配置
@@ -116,7 +78,7 @@ export default {
                 mes: errMsg,
                 timeout: 5000
               });
-              return Promise.reject(msg)
+              return Promise.reject(errMsg)
           }
         }
       }, error => {

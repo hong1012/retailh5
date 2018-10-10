@@ -10,27 +10,27 @@ export default new Router({
     {
       path: '/',
       meta: {label: '首页', keepAlive: true},
-      component: resolve => require(['../pages/index'], resolve)
+      component: resolve => require(['../index.vue'], resolve)
     },
     {
       path: '/recharge/list',
       meta: {label: '充值记录', keepAlive: true},
-      component: resolve => require(['../pages/recharge/list'], resolve)
+      component: resolve => require(['../recharge/list'], resolve)
     },
     {
       path: '/recharge/index',
       meta: {label: '充值', keepAlive: true},
-      component: resolve => require(['../pages/recharge/index/index'], resolve)
+      component: resolve => require(['../recharge/index/index'], resolve)
     },
     {
       path: '/consume/list',
       meta: {label: '消费记录', keepAlive: true},
-      component: resolve => require(['../pages/consume/list'], resolve)
+      component: resolve => require(['../consume/list'], resolve)
     },
     {
       path: '/consume/detail',
       meta: {label: '消费详情', keepAlive: true},
-      component: resolve => require(['../pages/consume/detail'], resolve)
+      component: resolve => require(['../consume/detail'], resolve)
     }
   ]
 })
